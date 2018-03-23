@@ -14,6 +14,7 @@ namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 use FOS\UserBundle\Controller\ResettingController as BaseResettingController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controller managing the resetting of the password
@@ -30,7 +31,7 @@ class ResettingController extends BaseResettingController
     /**
      * Request reset user password: submit form and send email
      */
-    public function sendEmailAction()
+    public function sendEmailAction(Request $request)
     {
         $email = $this->container->get('request')->request->get('email');
 

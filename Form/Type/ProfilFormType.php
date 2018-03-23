@@ -3,6 +3,9 @@
 namespace CanalTP\SamEcoreUserManagerBundle\Form\Type;
 
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseRegistrationFormType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -22,7 +25,7 @@ class ProfilFormType extends BaseRegistrationFormType
         parent::buildForm($builder, $options);
         $builder->add(
             'lastname',
-            null,
+            TextType::class,
             array(
                 'label' => 'form.lastname',
                 'translation_domain' => 'FOSUserBundle',
@@ -33,7 +36,7 @@ class ProfilFormType extends BaseRegistrationFormType
         );
         $builder->add(
             'firstname',
-            null,
+            TextType::class,
             array(
                 'label' => 'form.firstname',
                 'translation_domain' => 'FOSUserBundle',
@@ -42,11 +45,11 @@ class ProfilFormType extends BaseRegistrationFormType
                 )
             )
         );
-        $builder->add('email', 'email', array('disabled' => true));
+        $builder->add('email', EmailType::class, array('disabled' => true));
 
         $builder->add(
             'timezone',
-            'timezone',
+            TimezoneType::class,
             [
               'label' => 'form.timezone',
               'preferred_choices' => array('Europe/Paris'),
@@ -55,11 +58,16 @@ class ProfilFormType extends BaseRegistrationFormType
         );
     }
 
-    /**
-     * @return string
-     */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    public function getBlockPrefix()
     {
         return 'edit_user_profil';
     }
+
+
+
 }

@@ -52,8 +52,8 @@
     <input type="hidden" name="{{ flow.getFormStepKey() }}" value="{{ flow.getCurrentStepNumber() }}" />
 
     {% include 'CanalTPSamEcoreUserManagerBundle:User:buttons.html.twig' %}
-
-    {{ form_end(form, {'render_rest': false}) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block left_menu -%}

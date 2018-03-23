@@ -2,6 +2,7 @@
 
 namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use CanalTP\SamCoreBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ class UserController extends AbstractController
         $this->isAllowed('BUSINESS_VIEW_USER');
 
         $userManager = $this->container->get('fos_user.user_manager');
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $isSuperAdmin = $user->hasRole('ROLE_SUPER_ADMIN');
         if ($isSuperAdmin) {
             $entities = $this->container->get('sam.user_manager')->findUsers();
@@ -60,8 +61,12 @@ class UserController extends AbstractController
             $user = $form->getData();
 
             $flow->saveCurrentStepData($form);
-            $user->setStatus($flow->getCurrentStep());
-            $this->get('fos_user.registration.form.handler')->save(
+            $user->setStatus($flow->getCurrentStepNumber());
+            /*$this->get('fos_user.registration.form.handler')->save(
+                $user,
+                false
+            );*/
+            $this->get('sam.registration.form.handler.default')->save(
                 $user,
                 false
             );
@@ -145,7 +150,7 @@ class UserController extends AbstractController
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+            ->add('id', HiddenType::class)
             ->getForm();
     }
 
@@ -161,18 +166,18 @@ class UserController extends AbstractController
     /**
      * Displays a form to edit profil of current user.
      */
-    public function editProfilAction()
+    public function editProfilAction(Request $request)
     {
         $app = $this->get('canal_tp_sam.application.finder')->getCurrentApp();
-        $id = $this->get('security.context')->getToken()->getUser()->getId();
+        $id = $this->get('security.token_storage')->getToken()->getUser()->getId();
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $id));
         $form = $this->createForm(
-            new ProfilFormType(),
+            ProfilFormType::class,
             $user
         );
 
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $this->editProfilProcessForm($user);
         }

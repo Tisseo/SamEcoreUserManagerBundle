@@ -4,10 +4,12 @@ namespace CanalTP\SamEcoreUserManagerBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 
 class UserType extends AbstractType
 {
@@ -15,7 +17,7 @@ class UserType extends AbstractType
     {
         $builder->add(
             'username',
-            'text',
+            TextType::class,
             array(
                 'label' => 'form.username',
                 'attr' => array(
@@ -28,7 +30,7 @@ class UserType extends AbstractType
 
         $builder->add(
             'firstname',
-            'text',
+            TextType::class,
             array(
                 'label' => 'form.firstname',
                 'attr' => array(
@@ -45,7 +47,7 @@ class UserType extends AbstractType
 
         $builder->add(
             'lastname',
-            'text',
+            TextType::class,
             array(
                 'label' => 'form.lastname',
                 'attr' => array(
@@ -62,7 +64,7 @@ class UserType extends AbstractType
 
         $builder->add(
             'email',
-            'text',
+            EmailType::class,
             array(
                 'label' => 'form.email',
                 'attr' => array(
@@ -75,7 +77,7 @@ class UserType extends AbstractType
 
         $builder->add(
             'timezone',
-            'timezone',
+            TimezoneType::class,
             [
               'label' => 'form.timezone',
               'preferred_choices' => array('Europe/Paris'),
@@ -84,7 +86,7 @@ class UserType extends AbstractType
         );
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
@@ -96,6 +98,10 @@ class UserType extends AbstractType
 
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    public function getBlockPrefix() {
         return 'create_user';
     }
 }

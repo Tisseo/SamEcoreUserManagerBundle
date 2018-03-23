@@ -6,6 +6,7 @@ use FOS\UserBundle\Controller\RegistrationController as BaseRegistrationControll
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use FOS\UserBundle\Model\UserInterface;
@@ -42,7 +43,7 @@ class RegistrationController extends BaseRegistrationController
     /**
      * Receive the confirmation token from user email provider, login the user
      */
-    public function confirmAction($token)
+    public function confirmAction(Request $request, $token)
     {
         $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
 

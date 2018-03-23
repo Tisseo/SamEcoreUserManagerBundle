@@ -2,13 +2,16 @@
 
 namespace CanalTP\SamEcoreUserManagerBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityRepository;;
 use Doctrine\ORM\EntityManager;
@@ -16,14 +19,16 @@ use Doctrine\ORM\EntityManager;
 class RoleByApplicationType extends AbstractType
 {
     private $om;
-    private $securityContext;
+    private $tokenStorage;
     private $currentUser;
+    private $authorization;
 
-    public function __construct(EntityManager $om, SecurityContext $securityContext)
+    public function __construct(EntityManager $om, TokenStorage $tokenStorage, AuthorizationChecker $authorization)
     {
         $this->om = $om;
-        $this->securityContext = $securityContext;
-        $this->currentUser = $securityContext->getToken()->getUser();
+        $this->tokenStorage = $tokenStorage;
+        $this->currentUser = $tokenStorage->getToken()->getUser();
+        $this->authorization = $authorization;
     }
 
      /**
@@ -38,7 +43,7 @@ class RoleByApplicationType extends AbstractType
                 $form = $event->getForm();
                 $data = $event->getData();
 
-                $form->add('roles', 'entity', array(
+                $form->add('roles', EntityType::class, array(
                     'label'         => $data->getName(),
                     'multiple'      => true,
                     'expanded'      => true,
@@ -52,16 +57,16 @@ class RoleByApplicationType extends AbstractType
                         return $qb;
                     },
                     'translation_domain' => 'messages',
-                    'property' => 'name'
+                    'choice_label' => 'name'
                 ));
             }
         );
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'CanalTP\SamCoreBundle\Entity\Application',
@@ -73,7 +78,7 @@ class RoleByApplicationType extends AbstractType
         $userEditRoles = $form->getParent()->getParent()->getData()->getRoles();
         $currentUserRoles = $this->currentUser->getRoles();
         // TODO: Check business by Application
-        $canAssignAll = $this->securityContext->isGranted('BUSINESS_MANAGE_USER');
+        $canAssignAll = $this->authorization->isGranted('BUSINESS_MANAGE_USER');
 
         foreach ($view->children['roles']->children as $role) {
             if ($canAssignAll == false && !array_key_exists($role->vars['value'], $currentUserRoles)) {
@@ -91,6 +96,11 @@ class RoleByApplicationType extends AbstractType
      * @return string
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    public function getBlockPrefix()
     {
         return 'assign_role_by_application';
     }

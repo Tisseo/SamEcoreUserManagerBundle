@@ -18,7 +18,7 @@ class RegistrationFlow extends FormFlow
     /**
      * @inherit
      */
-    public function __construct(
+    /*public function __construct(
         UserType $userType,
         CustomerType $userAssignCustomerType,
         RoleType $userCustomerAssignRoleType
@@ -27,7 +27,7 @@ class RegistrationFlow extends FormFlow
         $this->userType = $userType;
         $this->userAssignCustomerType = $userAssignCustomerType;
         $this->userCustomerAssignRoleType = $userCustomerAssignRoleType;
-    }
+    }*/
 
     public function getName()
     {
@@ -39,15 +39,15 @@ class RegistrationFlow extends FormFlow
         return array(
             array(
                 'label' => 'form.user.step_1.title',
-                'type' => $this->userType
+                'form_type' => 'CanalTP\SamEcoreUserManagerBundle\Form\Type\UserType'
             ),
             array(
                 'label' => 'form.user.step_2.title',
-                'type' => $this->userAssignCustomerType
+                'form_type' => 'CanalTP\SamEcoreUserManagerBundle\Form\Type\CustomerType'
             ),
             array(
                 'label' => 'form.user.step_3.title',
-                'type' => $this->userCustomerAssignRoleType
+                'form_type' => 'CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleType'
             )
         );
     }

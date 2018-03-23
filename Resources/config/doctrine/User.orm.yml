@@ -16,44 +16,13 @@ CanalTP\SamEcoreUserManagerBundle\Entity\User:
             column: usr_last_name
             type: string
             length: 255
-        username:
-            column: usr_username
-            type: string
-            length: 255
-        usernameCanonical:
-            column: usr_username_canonical
-            type: string
-            length: 255
-            unique: true
-        email:
-            column: usr_email
-            type: string
-            length: 255
-        emailCanonical:
-            column: usr_email_canonical
-            type: string
-            length: 255
-            unique: true
         timezone:
             column: usr_timezone
             type: string
             length: 255
-        salt:
-            column: usr_salt
-            type: string
-        password:
-            column: usr_password
-            type: string
-        enabled:
-            column: usr_enabled
-            type: boolean
         locked:
             column: usr_locked
             type: boolean
-        lastLogin:
-            column: usr_last_login
-            type: datetime
-            nullable: true
         status:
             column: usr_status
             type: integer
@@ -62,14 +31,6 @@ CanalTP\SamEcoreUserManagerBundle\Entity\User:
             type: boolean
         expiresAt:
             column: usr_expires_at
-            type: datetime
-            nullable: true
-        confirmationToken:
-            column: usr_confirmation_token
-            type: string
-            nullable: true
-        passwordRequestedAt:
-            column: usr_password_requested_at
             type: datetime
             nullable: true
         credentialsExpired:
@@ -81,9 +42,9 @@ CanalTP\SamEcoreUserManagerBundle\Entity\User:
             nullable: true
     uniqueConstraints:
         username_idx:
-            columns: [ usr_username, usr_username_canonical ]
+            columns: [ username, username_canonical ]
         email_idx:
-            columns: [ usr_email, usr_email_canonical ]
+            columns: [ email, email_canonical ]
     manyToOne:
         customer:
             targetEntity: CanalTP\NmmPortalBundle\Entity\Customer

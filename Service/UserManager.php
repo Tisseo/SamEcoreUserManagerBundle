@@ -17,7 +17,7 @@ class UserManager extends BaseUserManager
 
     public function findUsersBy(array $criteria)
     {
-        return $this->repository->findBy($criteria);
+        return $this->getRepository()->findBy($criteria);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserManager extends BaseUserManager
      */
     public function findUsers()
     {
-        $query = $this->repository->createQueryBuilder('u')
+        $query = $this->getRepository()->createQueryBuilder('u')
             ->orderBy('u.lastLogin', 'DESC')
             ->getQuery();
 
@@ -37,7 +37,7 @@ class UserManager extends BaseUserManager
 
     public function find($id)
     {
-        $query = $this->repository->createQueryBuilder('u')
+        $query = $this->getRepository()->createQueryBuilder('u')
             ->addSelect('r')
             ->addSelect('a')
             ->leftJoin('u.userRoles', 'r')

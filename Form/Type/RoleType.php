@@ -3,9 +3,9 @@
 namespace CanalTP\SamEcoreUserManagerBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use CanalTP\SamEcoreUserManagerBundle\Form\DataTransformer\RoleToUserApplicationRoleTransformer;
 use CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleByApplicationType;
@@ -31,10 +31,10 @@ class RoleType extends AbstractType
     {
         $builder->add(
             'applications',
-            'collection',
+            CollectionType::class,
             array(
                 'label' => 'applications',
-                'type' => $this->roleByApplicationType
+                'entry_type' => $this->roleByApplicationType
             )
         )->addModelTransformer($this->userRolesTransformer);
     }
@@ -44,7 +44,7 @@ class RoleType extends AbstractType
         $this->initRoleField($builder);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
@@ -56,6 +56,11 @@ class RoleType extends AbstractType
 
     public function getName()
     {
+        return $this->getBlockPrefix();
+
+    }
+
+    public function getBlockPrefix() {
         return 'assign_role';
     }
 }

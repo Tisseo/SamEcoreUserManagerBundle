@@ -14,14 +14,17 @@
     <services>
         <service id="sam_role_by_application.type" class="%sam_role_by_application.type.class%">
             <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="security.context" />
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="security.authorization_checker" />
+            <tag name="form.type" />
         </service>
 
         <service
             id="sam.registration.assign_role.role_to_user_application_role_transformer.data_transformer"
             class="CanalTP\SamEcoreUserManagerBundle\Form\DataTransformer\RoleToUserApplicationRoleTransformer">
             <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="security.context" />
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="security.authorization_checker" />
         </service>
 
         <service id="sam.user_provider.email" class="CanalTP\SamEcoreUserManagerBundle\Security\EmailProvider" public="false">
@@ -29,27 +32,25 @@
         </service>
 
         <service id="sam.registration.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\UserType">
-            <tag name="form.type" alias="create_user" />
+            <tag name="form.type" />
         </service>
 
         <service id="sam.registration.assign_customer.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\CustomerType">
             <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="security.context" />
+            <argument type="service" id="security.token_storage" />
+            <tag name="form.type" />
         </service>
 
         <service id="sam.registration.assign_role.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleType">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="sam.registration.assign_role.role_to_user_application_role_transformer.data_transformer" />
             <argument type="service" id="sam_role_by_application.type" />
+            <tag name="form.type" />
         </service>
 
         <service id="sam.registration.form.flow"
                 class="CanalTP\SamEcoreUserManagerBundle\Form\Flow\RegistrationFlow"
-                parent="craue.form.flow"
-                scope="request">
-            <argument type="service" id="sam.registration.form.type" />
-            <argument type="service" id="sam.registration.assign_customer.form.type" />
-            <argument type="service" id="sam.registration.assign_role.form.type" />
+                parent="craue.form.flow">
         </service>
 
         <service id="canaltp_user.confirmation.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\ConfirmationFormType">
@@ -72,10 +73,12 @@
         </service>
 
         <service id="sam.user_manager" class="CanalTP\SamEcoreUserManagerBundle\Service\UserManager">
-            <argument type="service" id="security.encoder_factory" />
-            <argument type="service" id="fos_user.util.username_canonicalizer" />
-            <argument type="service" id="fos_user.util.email_canonicalizer" />
-            <argument type="service" id="fos_user.entity_manager" />
+            <!--<argument type="service" id="security.encoder_factory" />-->
+            <argument type="service" id="fos_user.util.password_updater" />
+            <!--<argument type="service" id="fos_user.util.username_canonicalizer" />
+            <argument type="service" id="fos_user.util.email_canonicalizer" />-->
+            <argument type="service" id="fos_user.util.canonical_fields_updater" />
+            <argument type="service" id="fos_user.object_manager" />
             <argument>%fos_user.model.user.class%</argument>
             <call method="setBusinessRegistry">
                 <argument type="service" id="sam.business_component" />
@@ -83,25 +86,24 @@
         </service>
 
         <service id="canaltp.role.processor" class="CanalTP\SamEcoreUserManagerBundle\Processor\RoleProcessor">
-            <argument type="service" id="security.context" />
+            <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="fos_user.user_manager" />
         </service>
 
         <service id="canaltp.security.role_hierarchy" alias="security.role_hierarchy" />
 
-        <service id="sam.registration.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\RegistrationFormHandler" scope="request" public="false">
-            <argument type="service" id="fos_user.registration.form" />
-            <argument type="service" id="request" />
+        <service id="sam.registration.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\RegistrationFormHandler">
+            <!--<argument typphp e="service" id="fos_user.registration.form.factory" />
+            <argument type="service" id="request" />-->
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" />
-            <argument type="service" id="fos_user.util.token_generator" />
-            <call method="setObjectManager">
+            <!--<call method="setObjectManager">
                 <argument type="service" id="doctrine.orm.entity_manager" />
-            </call>
+            </call>-->
         </service>
 
-        <service id="sam.profile.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\ProfileFormHandler" scope="request" public="false">
+        <service id="sam.profile.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\ProfileFormHandler"  scope="request" public="false">
             <argument type="service" id="fos_user.profile.form" />
             <argument type="service" id="request" />
             <argument type="service" id="fos_user.user_manager" />

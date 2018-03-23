@@ -12,8 +12,8 @@
 namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 
 use CanalTP\SamCoreBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
+
 
 class SecurityController extends AbstractController
 {
@@ -30,11 +30,11 @@ class SecurityController extends AbstractController
         $session = $request->getSession();
 
         // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
+        } elseif (null !== $session && $session->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $session->get(Security::AUTHENTICATION_ERROR);
+            $session->remove(Security::AUTHENTICATION_ERROR);
         } else {
             $error = '';
         }
@@ -44,13 +44,13 @@ class SecurityController extends AbstractController
             $error = $error->getMessage();
         }
         // last username entered by the user
-        $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
+        $lastUsername = (null === $session) ? '' : $session->get(Security::LAST_USERNAME);
 
-        $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
+        $csrfToken = $this->container->get('security.csrf.token_manager')->getToken('authenticate');
 
-        if (true === $this->container->get('security.context')->isGranted('ROLE_USER')) {
+        if (true === $this->container->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             $handler = $this->container->get('sam.component.authentication.handler.login_success_handler');
-            return ($handler->onAuthenticationSuccess($request, $this->container->get('security.context')->getToken()));
+            return ($handler->onAuthenticationSuccess($request, $this->container->get('security.token_storage')->getToken()));
         }
 
         return $this->renderLogin(
@@ -72,12 +72,10 @@ class SecurityController extends AbstractController
      */
     protected function renderLogin(array $data)
     {
-        $template = sprintf(
-            'FOSUserBundle:Security:login.html.%s',
-            $this->container->getParameter('fos_user.template.engine')
+        return $this->container->get('templating')->renderResponse(
+            'FOSUserBundle:Security:login.html.twig',
+            $data
         );
-
-        return $this->container->get('templating')->renderResponse($template, $data);
     }
 
     public function checkAction()

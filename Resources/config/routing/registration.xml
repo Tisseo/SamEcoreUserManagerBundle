@@ -4,22 +4,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="fos_user_registration_register" pattern="/">
+    <route id="fos_user_registration_register" path="/">
         <default key="_controller">CanalTPSamEcoreUserManagerBundle:User:edit</default>
     </route>
 
-    <route id="fos_user_registration_check_email" pattern="/check-email">
+    <route id="fos_user_registration_check_email" path="/check-email">
         <default key="_controller">FOSUserBundle:Registration:checkEmail</default>
-        <requirement key="_method">GET</requirement>
+        <requirement key="attribute">GET</requirement>
     </route>
 
-    <route id="fos_user_registration_confirm" pattern="/confirm/{token}">
+    <route id="fos_user_registration_confirm" path="/confirm/{token}">
         <default key="_controller">FOSUserBundle:Registration:confirm</default>
     </route>
 
-    <route id="fos_user_registration_confirmed" pattern="/confirmed">
+    <route id="fos_user_registration_confirmed" path="/confirmed">
         <default key="_controller">FOSUserBundle:Registration:confirmed</default>
-        <requirement key="_method">GET</requirement>
+        <requirement key="attribute">GET</requirement>
     </route>
 
 </routes>

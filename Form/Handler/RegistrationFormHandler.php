@@ -2,22 +2,45 @@
 
 namespace CanalTP\SamEcoreUserManagerBundle\Form\Handler;
 
-use Symfony\Component\Form\FormError;
+use FOS\UserBundle\Mailer\Mailer;
+use FOS\UserBundle\Util\TokenGenerator;
+use CanalTP\SamEcoreUserManagerBundle\Service\UserManager;
+use CanalTP\SamEcoreUserManagerBundle\Entity\User;
+
+/*use Symfony\Component\Form\FormError;
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler as BaseRegistrationFormHandler;
 use CanalTP\SamEcoreApplicationManagerBundle\Exception\OutOfBoundsException;
 use CanalTP\SamEcoreApplicationManagerBundle\Component\BusinessComponentRegistry;
-use CanalTP\SamEcoreUserManagerBundle\Form\Model\UserRegistration;
-use CanalTP\SamEcoreUserManagerBundle\Entity\User;
+use CanalTP\SamEcoreUserManagerBundle\Form\Model\UserRegistration;*/
 
-
-class RegistrationFormHandler extends BaseRegistrationFormHandler
+class RegistrationFormHandler /*extends BaseRegistrationFormHandler*/
 {
-    private $businessRegistry;
-    private $objectManager;
+    /*private $objectManager;
 
     public function setObjectManager($om)
     {
         $this->objectManager = $om;
+    }*/
+
+    /**
+     * @var UserManager $userManager
+     */
+    private $userManager;
+
+    /**
+     * @var Mailer $mailer
+     */
+    private $mailer;
+
+    /**
+     * @var TokenGenerator $tokenGenerator
+     */
+    private $tokenGenerator;
+
+    public function __construct(UserManager $userManager, Mailer $mailer, TokenGenerator $tokenGenerator) {
+        $this->mailer = $mailer;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->userManager = $userManager;
     }
 
     /**

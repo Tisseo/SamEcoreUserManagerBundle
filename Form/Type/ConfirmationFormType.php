@@ -12,8 +12,9 @@
 namespace CanalTP\SamEcoreUserManagerBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfirmationFormType extends AbstractType
 {
@@ -22,7 +23,7 @@ class ConfirmationFormType extends AbstractType
         $builder
             ->add(
                 'new',
-                'repeated',
+                RepeatedType::class,
                 array(
                     'type' => 'password',
                     'options' => array('translation_domain' => 'FOSUserBundle'),
@@ -33,7 +34,7 @@ class ConfirmationFormType extends AbstractType
             );
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
@@ -44,6 +45,11 @@ class ConfirmationFormType extends AbstractType
     }
 
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    public function getBlockPrefix()
     {
         return 'canaltp_user_confirmation';
     }

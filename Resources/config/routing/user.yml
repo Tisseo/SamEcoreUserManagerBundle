@@ -1,15 +1,15 @@
 sam_user_list:
-    pattern:  /list
+    path:  /list
     defaults: { _controller: "CanalTPSamEcoreUserManagerBundle:User:list" }
 
 sam_user_edit:
-    pattern:  /edit/{user}
+    path:  /edit/{user}
     defaults: { _controller: "CanalTPSamEcoreUserManagerBundle:User:edit", user: null }
 
 sam_user_delete:
-    pattern:  /delete/{id}
+    path:  /delete/{id}
     defaults: { _controller: "CanalTPSamEcoreUserManagerBundle:User:delete" }
 
 sam_user_edit_profil:
-    pattern:  /profil
+    path:  /profil
     defaults: { _controller: "CanalTPSamEcoreUserManagerBundle:User:editProfil" }
