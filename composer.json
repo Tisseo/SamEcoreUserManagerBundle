@@ -33,7 +33,7 @@
     ],
     "require": {
         "friendsofsymfony/user-bundle": "~2.0.0",
-        "craue/formflow-bundle": "~2.1",
+        "craue/formflow-bundle": "~3.0",
         "php": ">=5.3.2"
     },
     "autoload": {
