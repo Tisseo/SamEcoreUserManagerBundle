@@ -3,17 +3,14 @@
 namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use CanalTP\SamCoreBundle\Controller\AbstractController;
-use CanalTP\SamEcoreApplicationManagerBundle\Exception\OutOfBoundsException;
 use CanalTP\SamEcoreUserManagerBundle\Form\Type\ProfilFormType;
 use CanalTP\SamEcoreUserManagerBundle\Entity\User;
-use CanalTP\SamEcoreUserManagerBundle\Form\Flow\RegistrationFlow;
 
 class UserController extends AbstractController
 {
-    private $userManager = null;
+    //private $userManager = null;
 
     /**
      * Lists all User entities.
@@ -62,10 +59,6 @@ class UserController extends AbstractController
 
             $flow->saveCurrentStepData($form);
             $user->setStatus($flow->getCurrentStepNumber());
-            /*$this->get('fos_user.registration.form.handler')->save(
-                $user,
-                false
-            );*/
             $this->get('sam.registration.form.handler.default')->save(
                 $user,
                 false
@@ -100,6 +93,7 @@ class UserController extends AbstractController
     {
         $this->isAllowed('BUSINESS_MANAGE_USER');
 
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->createDeleteForm($id);
 
         if ($request->getMethod() == 'GET') {
@@ -118,9 +112,8 @@ class UserController extends AbstractController
                 )
             );
         } else {
-            $form->bind($request);
-
-            if ($form->isValid()) {
+            $form->submit($request->request->get($form->getName()));
+            if ($form->isSubmitted() && $form->isValid()) {
                 if ($this->getUser()->getId() == $id) {
                     throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Seriously, you shouldn\'t delete your account.');
                 }
@@ -145,7 +138,7 @@ class UserController extends AbstractController
      *
      * @param mixed $id The entity id
      *
-     * @return Symfony\Component\Form\Form The form
+     * @return \Symfony\Component\Form\Form The form
      */
     private function createDeleteForm($id)
     {

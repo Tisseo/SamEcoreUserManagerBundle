@@ -10,14 +10,15 @@
                 {{ 'confirm_password.validation_rules'|trans({}, 'FOSUserBundle')|nl2br }}
             </div>
             <div class="panel-body">
-                <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+                {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+                {#<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">#}
                     {{ form_widget(form) }}
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-2">
                             <input class="btn btn-primary" id="_submit" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
                         </div>
                     </div>
-                </form>
+                {{ form_end(form) }}
                 <br/><br/>
                 <a href="{{ path("fos_user_security_login") }}">Back to login</a>
             </div>

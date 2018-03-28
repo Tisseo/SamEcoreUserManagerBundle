@@ -42,7 +42,7 @@ class ResettingController extends BaseResettingController
 
         if (null === $user) {
             return $this->container->get('templating')->renderResponse(
-                'FOSUserBundle:Resetting:request.html.'.$this->getEngine(),
+                'FOSUserBundle:Resetting:request.html.twig',
                 array('invalid_email' => $email)
             );
         }
@@ -51,7 +51,7 @@ class ResettingController extends BaseResettingController
         switch ($code) {
             case self::RESET_EMAIL_ALREADY_SENT:
                 return $this->container->get('templating')->renderResponse(
-                    'FOSUserBundle:Resetting:passwordAlreadyRequested.html.'.$this->getEngine()
+                    'FOSUserBundle:Resetting:passwordAlreadyRequested.html.twig'
                 );
                 break;
             case self::RESET_EMAIL_OK:
@@ -75,19 +75,19 @@ class ResettingController extends BaseResettingController
         $user = $this->container->get('fos_user.user_manager')->findUserByEmail($email);
 
         if (null === $user) {
-            $this->setFlash(self::SESSION_ADMIN_RESET, 'ctp_user.user.actions.reset_password.not_exist');
+            $this->addFlash(self::SESSION_ADMIN_RESET, 'ctp_user.user.actions.reset_password.not_exist');
         } else {
             $code = $this->resetEmail($user);
 
             switch ($code) {
                 case self::RESET_EMAIL_ALREADY_SENT:
-                    $this->setFlash(
+                    $this->addFlash(
                         self::SESSION_ADMIN_RESET,
                         'ctp_user.user.actions.reset_password.already_sent'
                     );
                     break;
                 case self::RESET_EMAIL_OK:
-                    $this->setFlash(
+                    $this->addFlash(
                         self::SESSION_ADMIN_RESET,
                         'ctp_user.user.actions.reset_password.sent'
                     );
@@ -123,10 +123,10 @@ class ResettingController extends BaseResettingController
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        $this->container->get('session')->set(
+        /*$this->container->get('session')->set(
             static::SESSION_EMAIL,
             $this->getObfuscatedEmail($user)
-        );
+        );*/
         $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->container->get('fos_user.user_manager')->updateUser($user);

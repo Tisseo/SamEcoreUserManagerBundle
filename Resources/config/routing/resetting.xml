@@ -4,29 +4,23 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="fos_user_resetting_request" path="/request">
+    <route id="fos_user_resetting_request" path="/request" methods="GET">
         <default key="_controller">FOSUserBundle:Resetting:request</default>
-        <requirement key="attribute">GET</requirement>
     </route>
 
-    <route id="fos_user_resetting_send_email" path="/send-email">
+    <route id="fos_user_resetting_send_email" path="/send-email" methods="POST">
         <default key="_controller">FOSUserBundle:Resetting:sendEmail</default>
-        <requirement key="attribute">POST</requirement>
     </route>
 
-    <route id="fos_user_resetting_check_email" path="/check-email">
+    <route id="fos_user_resetting_check_email" path="/check-email" methods="GET">
         <default key="_controller">FOSUserBundle:Resetting:checkEmail</default>
-        <requirement key="attribute">GET</requirement>
     </route>
 
-    <route id="fos_user_resetting_reset" path="/reset/{token}">
+    <route id="fos_user_resetting_reset" path="/reset/{token}" methods="GET POST">
         <default key="_controller">FOSUserBundle:Resetting:reset</default>
-        <requirement key="attribute">GET|POST</requirement>
     </route>
 
-    <route id="ctp_user_resetting_admin_reset" pattern="/admin-send-email">
+    <route id="ctp_user_resetting_admin_reset" path="/admin-send-email" methods="GET">
         <default key="_controller">CanalTPSamEcoreUserManagerBundle:Resetting:adminSendEmail</default>
-        <requirement key="attribute">GET</requirement>
     </route>
-
 </routes>

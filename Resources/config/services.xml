@@ -44,7 +44,8 @@
         <service id="sam.registration.assign_role.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleType">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="sam.registration.assign_role.role_to_user_application_role_transformer.data_transformer" />
-            <argument type="service" id="sam_role_by_application.type" />
+            <!--<argument type="service" id="sam_role_by_application.type" />-->
+            <argument>%sam_role_by_application.type.class%</argument>
             <tag name="form.type" />
         </service>
 

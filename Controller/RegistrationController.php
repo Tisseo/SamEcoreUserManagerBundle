@@ -33,7 +33,7 @@ class RegistrationController extends BaseRegistrationController
         }
 
         return $this->container->get('templating')->renderResponse(
-            'FOSUserBundle:Registration:checkEmail.html.'.$this->getEngine(),
+            'FOSUserBundle:Registration:checkEmail.html.twig',
             array(
                 'user' => $user,
             )
@@ -66,13 +66,14 @@ class RegistrationController extends BaseRegistrationController
                 $this->container->get('router')->generate('fos_user_registration_confirmed')
             );
             $this->container->get('fos_user.user_manager')->updateUser($user);
-            $this->authenticateUser($user, $response);
+            //$this->authenticateUser($user, $response);
+
 
             return $response;
         }
 
         return $this->container->get('templating')->renderResponse(
-            'CanalTPSamEcoreUserManagerBundle:Registration:confirm.html.'.$this->getEngine(),
+            'CanalTPSamEcoreUserManagerBundle:Registration:confirm.html.twig',
             array(
                 'token' => $token,
                 'form' => $form->createView(),

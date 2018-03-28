@@ -8,23 +8,38 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use CanalTP\SamEcoreUserManagerBundle\Form\DataTransformer\RoleToUserApplicationRoleTransformer;
-use CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleByApplicationType;
 
+
+/**
+ * Class RoleType
+ * @package CanalTP\SamEcoreUserManagerBundle\Form\Type
+ */
 class RoleType extends AbstractType
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager $em
+     */
     private $em;
+
+    /**
+     * @var RoleToUserApplicationRoleTransformer $userRolesTransformer
+     */
     private $userRolesTransformer;
-    private $roleByApplicationType;
+
+    /**
+     *
+     * @var string $roleByApplicationTypeFqcn
+     */
+    private $roleByApplicationTypeFqcn;
 
     public function __construct(
         EntityManager $entityManager,
         RoleToUserApplicationRoleTransformer $userRolesTransformer,
-        RoleByApplicationType $roleByApplicationType
-    )
+        $roleByApplicationTypeFqcn )
     {
         $this->em = $entityManager;
         $this->userRolesTransformer = $userRolesTransformer;
-        $this->roleByApplicationType = $roleByApplicationType;
+        $this->roleByApplicationTypeFqcn = $roleByApplicationTypeFqcn;
     }
 
     private function initRoleField(FormBuilderInterface $builder)
@@ -34,7 +49,7 @@ class RoleType extends AbstractType
             CollectionType::class,
             array(
                 'label' => 'applications',
-                'entry_type' => $this->roleByApplicationType
+                'entry_type' => $this->roleByApplicationTypeFqcn
             )
         )->addModelTransformer($this->userRolesTransformer);
     }

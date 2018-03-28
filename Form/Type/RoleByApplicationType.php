@@ -23,12 +23,14 @@ class RoleByApplicationType extends AbstractType
     private $currentUser;
     private $authorization;
 
+
     public function __construct(EntityManager $om, TokenStorage $tokenStorage, AuthorizationChecker $authorization)
     {
         $this->om = $om;
         $this->tokenStorage = $tokenStorage;
         $this->currentUser = $tokenStorage->getToken()->getUser();
         $this->authorization = $authorization;
+
     }
 
      /**
