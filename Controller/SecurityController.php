@@ -13,16 +13,17 @@ namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 
 use CanalTP\SamCoreBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class SecurityController extends AbstractController
 {
-    public function loginAction()
+    public function loginAction(Request $request)
     {
         /**
          * @var $request \Symfony\Component\HttpFoundation\Request
          */
-        $request = $this->container->get('request');
+        //$request = $this->container->get('request');
 
         /**
          * @var $session \Symfony\Component\HttpFoundation\Session
