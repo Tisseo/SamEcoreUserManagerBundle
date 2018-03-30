@@ -6,10 +6,10 @@
 
     <parameters>
         <parameter key="canaltp_user.confirmation.form.name">canaltp_user_confirmation_form</parameter>
-        <parameter key="canaltp_user.confirmation.form.type">canaltp_user_confirmation</parameter>
-        <parameter key="sam.registration.step_one.type.class">CanalTP\SamEcoreUserManagerBundle\Form\Type\RegistrationStepOneFormType</parameter>
+        <parameter key="canaltp_user.confirmation.form.type.class">CanalTP\SamEcoreUserManagerBundle\Form\Type\ConfirmationFormType</parameter>
+        <!--<parameter key="sam.registration.step_one.type.class">CanalTP\SamEcoreUserManagerBundle\Form\Type\RegistrationStepOneFormType</parameter>-->
         <parameter key="sam_role_by_application.type.class">CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleByApplicationType</parameter>
-        <parameter key="symfony_component_http_foundation_request">Symfony\Component\HttpFoundation\Request</parameter>
+        <parameter key="request_stack">Symfony\Component\HttpFoundation\RequestStack</parameter>
     </parameters>
 
     <services>
@@ -45,7 +45,7 @@
         <service id="sam.registration.assign_role.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\RoleType">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="sam.registration.assign_role.role_to_user_application_role_transformer.data_transformer" />
-            <!--<argument type="service" id="sam_role_by_application.type" />-->
+
             <argument>%sam_role_by_application.type.class%</argument>
             <tag name="form.type" />
         </service>
@@ -55,15 +55,15 @@
                 parent="craue.form.flow">
         </service>
 
-        <service id="canaltp_user.confirmation.form.type" class="CanalTP\SamEcoreUserManagerBundle\Form\Type\ConfirmationFormType">
-            <tag name="form.type" alias="canaltp_user_confirmation" />
+        <service id="CanalTP\SamEcoreUserManagerBundle\Form\Type\ConfirmationFormType" class="%canaltp_user.confirmation.form.type.class%">
+            <tag name="form.type" />
         </service>
 
-        <service id="canaltp_user.confirmation.form" class="%canaltp_user.confirmation.form.type%">
+        <service id="canaltp_user.confirmation.form" class="%canaltp_user.confirmation.form.type.class%">
 
             <factory method="createNamed" service="form.factory" class="Symfony\Component\Form\Form" />
             <argument>%canaltp_user.confirmation.form.name%</argument>
-            <argument>%canaltp_user.confirmation.form.type%</argument>
+            <argument>%canaltp_user.confirmation.form.type.class%</argument>
             <argument>null</argument>
             <argument type="collection">
                 <argument key="validation_groups">Confirmation</argument>
@@ -72,15 +72,14 @@
 
         <service id="canaltp_user.confirmation.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\ConfirmationFormHandler" shared="false">
             <argument type="service" id="canaltp_user.confirmation.form" />
-            <argument>%symfony_component_http_foundation_request%</argument>
             <argument type="service" id="fos_user.user_manager" />
+            <call method="setRequest">
+                <argument type="service" id="request_stack" />
+            </call>
         </service>
 
         <service id="sam.user_manager" class="CanalTP\SamEcoreUserManagerBundle\Service\UserManager">
-            <!--<argument type="service" id="security.encoder_factory" />-->
             <argument type="service" id="fos_user.util.password_updater" />
-            <!--<argument type="service" id="fos_user.util.username_canonicalizer" />
-            <argument type="service" id="fos_user.util.email_canonicalizer" />-->
             <argument type="service" id="fos_user.util.canonical_fields_updater" />
             <argument type="service" id="fos_user.object_manager" />
             <argument>%fos_user.model.user.class%</argument>
@@ -97,14 +96,9 @@
         <service id="canaltp.security.role_hierarchy" alias="security.role_hierarchy" />
 
         <service id="sam.registration.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\RegistrationFormHandler">
-            <!--<argument typphp e="service" id="fos_user.registration.form.factory" />
-            <argument type="service" id="request" />-->
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" />
-            <!--<call method="setObjectManager">
-                <argument type="service" id="doctrine.orm.entity_manager" />
-            </call>-->
         </service>
 
         <service id="sam.profile.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\ProfileFormHandler"  shared="false" public="false">

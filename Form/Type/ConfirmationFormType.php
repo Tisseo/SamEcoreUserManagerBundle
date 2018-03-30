@@ -12,6 +12,7 @@
 namespace CanalTP\SamEcoreUserManagerBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,7 +26,7 @@ class ConfirmationFormType extends AbstractType
                 'new',
                 RepeatedType::class,
                 array(
-                    'type' => 'password',
+                    'type' => PasswordType::class,
                     'options' => array('translation_domain' => 'FOSUserBundle'),
                     'first_options' => array('label' => 'form.new_password'),
                     'second_options' => array('label' => 'form.new_password_confirmation'),

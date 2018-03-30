@@ -14,8 +14,10 @@ namespace CanalTP\SamEcoreUserManagerBundle\Form\Handler;
 use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use CanalTP\SamEcoreUserManagerBundle\Form\Model\ConfirmUser;
+use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+
 
 class ConfirmationFormHandler
 {
@@ -25,14 +27,16 @@ class ConfirmationFormHandler
 
     public function __construct(
         FormInterface $form,
-        Request $request,
         UserManagerInterface $userManager
     ) {
         $this->form = $form;
-        $this->request = $request;
         $this->userManager = $userManager;
     }
 
+    public function setRequest(RequestStack $requestStack)
+    {
+        $this->request = $requestStack->getCurrentRequest();
+    }
     /**
      * @return string
      */
@@ -61,8 +65,9 @@ class ConfirmationFormHandler
     {
         $this->form->setData(new ConfirmUser());
 
+
         if ('POST' === $this->request->getMethod()) {
-            $this->form->bind($this->request);
+            $this->form->handleRequest($this->request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($user);
