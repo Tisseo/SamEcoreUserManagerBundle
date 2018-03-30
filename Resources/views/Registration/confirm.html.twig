@@ -10,7 +10,15 @@
                 {{ 'confirm_password.validation_rules'|trans({}, 'FOSUserBundle')|nl2br }}
             </div>
             <div class="panel-body">
-                <form action="{{ path('fos_user_registration_confirm', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+                {{ form_start(
+                form, {
+                    'action': path('fos_user_registration_confirm', {'token': token}),
+                    'method': 'POST',
+                    'attr': {'class': 'fos_user_resetting_reset'}
+                }
+                )
+                }}
+                {#<form action="{{ path('fos_user_registration_confirm', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">#}
                     {{ form_widget(form) }}
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-2">

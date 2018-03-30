@@ -1,4 +1,14 @@
+{{ form_start(
+    form, {
+        'action': path('fos_user_registration_confirm', {'token': token}),
+        'method': 'POST',
+        'attr': {'class': 'fos_user_resetting_reset'}
+        }
+    )
+}}
+{#
 <form action="{{ path('fos_user_registration_confirm', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+#}
     {{ form_widget(form) }}
     <div>
         <input class="btn btn-success" type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
