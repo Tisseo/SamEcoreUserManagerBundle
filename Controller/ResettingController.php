@@ -30,10 +30,13 @@ class ResettingController extends BaseResettingController
 
     /**
      * Request reset user password: submit form and send email
+     * @param Request $request
+     *
+     * @return RedirectResponse or Response
      */
     public function sendEmailAction(Request $request)
     {
-        $email = $this->container->get('request')->request->get('email');
+        $email = $request->get('email');
 
         /**
          * @var $user UserInterface
@@ -64,10 +67,13 @@ class ResettingController extends BaseResettingController
 
     /**
      * Request reset user password: submit form and send email
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function adminSendEmailAction()
+    public function adminSendEmailAction(Request $request)
     {
-        $email = $this->container->get('request')->query->get('email');
+        $email = $request->query->get('email');
 
         /**
          * @var $user UserInterface
