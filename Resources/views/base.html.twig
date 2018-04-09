@@ -7,12 +7,6 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% stylesheets 'css/bootstrap.css'
-                        '../src/CanalTP/SamCoreBundle/Resources/public/css/*'
-                       filter='cssrewrite' output='css/full.css' %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
-
         {% block menu %}
             <nav class="navbar navbar-default" role="navigation">
                 <div class="navbar-header">
@@ -81,13 +75,8 @@
                 </div>
             </div>
             {% endblock %}
-        </div>
+       </div>
 
-        {% javascripts
-            'js/jquery.js'
-            'js/bootstrap.js' output='js/concat.js' %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
         {% include 'CanalTPSamEcoreUserManagerBundle::base.js.twig' %}
         {% block javascripts %}{% endblock %}
     </body>

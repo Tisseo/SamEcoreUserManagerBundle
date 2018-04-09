@@ -105,7 +105,7 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        require(['jquery_tablesorter_pager', 'bootstrap_extensions_table_export'], function(tableSorter) {
+        //require(['jquery_tablesorter_pager'], function() {
             $(function() {
                 var pagerOptions = {
                     // target the pager markup - see the HTML block below
@@ -127,6 +127,6 @@
             $("a#user_list_download_csv").click(function () {
                 $('#table').tableExport({type:'csv',escape:'false',tableName:'users'});
             })
-         });
+         //});
     </script>
 {% endblock %}
