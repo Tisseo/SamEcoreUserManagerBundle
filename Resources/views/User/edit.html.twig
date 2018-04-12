@@ -20,25 +20,15 @@
     <h1>{{ title|trans }}</h1>
     <hr/>
     {{ form_start(form, { action: path('sam_user_edit', { 'user': id }), attr: {class: 'fos_user_registration_register custom' } }) }}
-    {{ bootstrap_set_style('horizontal') }}
     {% if flow.getCurrentStepNumber() == 1 %}
-
             {{ form_row(form.username) }}
-
             {{ form_row(form.firstname) }}
-
             {{ form_row(form.lastname) }}
-
             {{ form_row(form.email) }}
-
             {{ form_row(form.timezone) }}
-
     {% elseif flow.getCurrentStepNumber() == 2 %}
-
             {{ form_row(form.customer) }}
-
     {% elseif flow.getCurrentStepNumber() == 3 %}
-
         {% for customerApplications in form.applications %}
             {% for customerApplication in customerApplications %}
                 {% if (customerApplication|length) %}
@@ -46,11 +36,8 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
-
     {% endif %}
-
     <input type="hidden" name="{{ flow.getFormStepKey() }}" value="{{ flow.getCurrentStepNumber() }}" />
-
     {% include 'CanalTPSamEcoreUserManagerBundle:User:buttons.html.twig' %}
     {{ form_rest(form) }}
     {{ form_end(form) }}

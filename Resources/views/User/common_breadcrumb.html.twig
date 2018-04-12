@@ -1,5 +1,6 @@
 {% extends ['::base.html.twig', 'CanalTPSamCoreBundle::base.html.twig'] %}
 
+
 {% block breadcrumb %}
     {{ parent() }}
     <li><a href="{{ path('sam_user_list') }}">{{'ctp_user.user._breadcrumb'|trans}}</a></li>

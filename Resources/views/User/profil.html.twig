@@ -20,19 +20,15 @@
     <h1>{{'ctp_user.profil.edit._title'|trans}}</h1>
     <hr/>
     {{ form_start(form, { action: path('sam_user_edit_profil'), attr: {'novalidate': 'novalidate', class: 'fos_user_registration_register custom' } }) }}
-        {{ bootstrap_set_style('horizontal') }}
-
         {{ form_row(form.lastname) }}
         {{ form_row(form.firstname) }}
         {{ form_row(form.username) }}
         {{ form_row(form.email) }}
         {{ form_row(form.timezone) }}
-	{{ form_row(form.plainPassword) }}
-
+    	{{ form_row(form.plainPassword) }}
         <button class="btn btn-success" type="submit">
             <span class="glyphicon glyphicon-floppy-disk"></span> {{'ctp_user.profil.edit.actions'|trans}}
         </button>
-
         {{ form_widget(form._token) }}
     {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
