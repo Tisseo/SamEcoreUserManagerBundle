@@ -47,7 +47,7 @@ class UserController extends AbstractController
 
     public function editAction(Request $request, User $user = null)
     {
-        $this->isGranted('BUSINESS_MANAGE_USER');
+        $this->checkPermission('BUSINESS_MANAGE_USER');
 
         $isNew = ($user == null);
         $flow = $this->get('sam.registration.form.flow');
