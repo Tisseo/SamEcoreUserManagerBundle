@@ -52,7 +52,8 @@
 
         <service id="sam.registration.form.flow"
                 class="CanalTP\SamEcoreUserManagerBundle\Form\Flow\RegistrationFlow"
-                parent="craue.form.flow">
+                parent="craue.form.flow"
+                public="true">
         </service>
 
         <service id="CanalTP\SamEcoreUserManagerBundle\Form\Type\ConfirmationFormType" class="%canaltp_user.confirmation.form.type.class%">
@@ -70,7 +71,7 @@
             </argument>
         </service>
 
-        <service id="canaltp_user.confirmation.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\ConfirmationFormHandler" shared="false">
+        <service id="canaltp_user.confirmation.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\ConfirmationFormHandler" shared="false" public="true">
             <argument type="service" id="canaltp_user.confirmation.form" />
             <argument type="service" id="fos_user.user_manager" />
             <call method="setRequest">
@@ -78,7 +79,7 @@
             </call>
         </service>
 
-        <service id="sam.user_manager" class="CanalTP\SamEcoreUserManagerBundle\Service\UserManager">
+        <service id="sam.user_manager" class="CanalTP\SamEcoreUserManagerBundle\Service\UserManager" public="true">
             <argument type="service" id="fos_user.util.password_updater" />
             <argument type="service" id="fos_user.util.canonical_fields_updater" />
             <argument type="service" id="fos_user.object_manager" />
@@ -95,7 +96,7 @@
 
         <service id="canaltp.security.role_hierarchy" alias="security.role_hierarchy" />
 
-        <service id="sam.registration.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\RegistrationFormHandler">
+        <service id="sam.registration.form.handler.default" class="CanalTP\SamEcoreUserManagerBundle\Form\Handler\RegistrationFormHandler" public="true">
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" />
