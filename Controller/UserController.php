@@ -171,7 +171,7 @@ class UserController extends AbstractController
         );
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->editProfilProcessForm($user);
         }
         return $this->render(
