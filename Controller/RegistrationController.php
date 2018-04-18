@@ -20,7 +20,7 @@ class RegistrationController extends BaseRegistrationController
     /**
      * Tell the user to check his email provider
      */
-    public function checkEmailAction()
+    public function checkEmailAction(Request $request)
     {
         $email = $this->container->get('session')->get('fos_user_send_confirmation_email/email');
         $this->container->get('session')->remove('fos_user_send_confirmation_email/email');
