@@ -11,7 +11,7 @@
 
 namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 
-use FOS\UserBundle\Controller\ResettingController as BaseResettingController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +22,12 @@ use Symfony\Component\HttpFoundation\Request;
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ResettingController extends BaseResettingController
+class ResettingController extends Controller
 {
     const SESSION_ADMIN_RESET = 'fos_user_send_resetting_email/admin_email';
     const RESET_EMAIL_ALREADY_SENT = 0;
     const RESET_EMAIL_OK = 1;
+
 
     /**
      * Request reset user password: submit form and send email
@@ -41,10 +42,10 @@ class ResettingController extends BaseResettingController
         /**
          * @var $user UserInterface
          */
-        $user = $this->container->get('fos_user.user_manager')->findUserByEmail($email);
+        $user = $this->get('fos_user.user_manager')->findUserByEmail($email);
 
         if (null === $user) {
-            return $this->container->get('templating')->renderResponse(
+            return $this->get('templating')->renderResponse(
                 'FOSUserBundle:Resetting:request.html.twig',
                 array('invalid_email' => $email)
             );
@@ -53,13 +54,13 @@ class ResettingController extends BaseResettingController
         $code = $this->resetEmail($user);
         switch ($code) {
             case self::RESET_EMAIL_ALREADY_SENT:
-                return $this->container->get('templating')->renderResponse(
+                return $this->get('templating')->renderResponse(
                     'FOSUserBundle:Resetting:passwordAlreadyRequested.html.twig'
                 );
                 break;
             case self::RESET_EMAIL_OK:
                 return new RedirectResponse(
-                    $this->container->get('router')->generate('fos_user_resetting_check_email')
+                    $this->get('router')->generate('fos_user_resetting_check_email')
                 );
                 break;
         }
@@ -78,7 +79,7 @@ class ResettingController extends BaseResettingController
         /**
          * @var $user UserInterface
          */
-        $user = $this->container->get('fos_user.user_manager')->findUserByEmail($email);
+        $user = $this->get('fos_user.user_manager')->findUserByEmail($email);
 
         if (null === $user) {
             $this->addFlash(self::SESSION_ADMIN_RESET, 'ctp_user.user.actions.reset_password.not_exist');
@@ -102,7 +103,7 @@ class ResettingController extends BaseResettingController
         }
 
         return new RedirectResponse(
-            $this->container->get('router')->generate('sam_user_list')
+            $this->get('router')->generate('sam_user_list')
         );
     }
 
@@ -116,7 +117,7 @@ class ResettingController extends BaseResettingController
      */
     private function resetEmail(UserInterface $user)
     {
-        $ttl = $this->container->getParameter('fos_user.resetting.token_ttl');
+        $ttl = $this->getParameter('fos_user.resetting.token_ttl');
         if ($user->isPasswordRequestNonExpired($ttl)) {
             return self::RESET_EMAIL_ALREADY_SENT;
         }
@@ -133,9 +134,9 @@ class ResettingController extends BaseResettingController
             static::SESSION_EMAIL,
             $this->getObfuscatedEmail($user)
         );*/
-        $this->container->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
-        $this->container->get('fos_user.user_manager')->updateUser($user);
+        $this->get('fos_user.user_manager')->updateUser($user);
 
         return self::RESET_EMAIL_OK;
     }
@@ -149,6 +150,6 @@ class ResettingController extends BaseResettingController
      */
     protected function getRedirectionUrl(UserInterface $user)
     {
-        return $this->container->get('router')->generate('root');
+        return $this->get('router')->generate('root');
     }
 }

@@ -8,18 +8,16 @@
         <default key="_controller">CanalTPSamEcoreUserManagerBundle:User:edit</default>
     </route>
 
-    <route id="fos_user_registration_check_email" path="/check-email">
-        <default key="_controller">FOSUserBundle:Registration:checkEmail</default>
-        <requirement key="attribute">GET</requirement>
+    <route id="fos_user_registration_check_email" path="/check-email" methods="GET">
+        <default key="_controller">Ffos_user.registration.controller:checkEmailAction</default>
     </route>
 
-    <route id="fos_user_registration_confirm" path="/confirm/{token}">
-        <default key="_controller">FOSUserBundle:Registration:confirm</default>
+    <route id="fos_user_registration_confirm" path="/confirm/{token}" methods="GET">
+        <default key="_controller">fos_user.registration.controller:confirmAction</default>
     </route>
 
-    <route id="fos_user_registration_confirmed" path="/confirmed">
-        <default key="_controller">FOSUserBundle:Registration:confirmed</default>
-        <requirement key="attribute">GET</requirement>
+    <route id="fos_user_registration_confirmed" path="/confirmed" methods="GET">
+        <default key="_controller">fos_user.registration.controller:confirmedAction</default>
     </route>
 
 </routes>

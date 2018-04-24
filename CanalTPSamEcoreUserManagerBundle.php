@@ -15,10 +15,10 @@ class CanalTPSamEcoreUserManagerBundle extends Bundle
         $container->addCompilerPass(new FormHandlerPass());
     }
 
-    public function getParent()
+    /*public function getParent()
     {
         return 'FOSUserBundle';
-    }
+    }*/
 
     public function getContainerExtension()
     {
