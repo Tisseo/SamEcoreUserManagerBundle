@@ -9,7 +9,7 @@
     </route>
 
     <route id="fos_user_resetting_send_email" path="/send-email" methods="POST">
-        <default key="_controller">fos_user.resetting.controller:sendEmailAction</default>
+        <default key="_controller">sam.ecoreuser.resetting.controller:sendEmailAction</default>
     </route>
 
     <route id="fos_user_resetting_check_email" path="/check-email" methods="GET">
@@ -21,6 +21,6 @@
     </route>
 
     <route id="ctp_user_resetting_admin_reset" path="/admin-send-email" methods="GET">
-        <default key="_controller">CanalTPSamEcoreUserManagerBundle:Resetting:adminSendEmail</default>
+        <default key="_controller">sam.ecoreuser.resetting.controller:adminSendEmailAction</default>
     </route>
 </routes>

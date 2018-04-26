@@ -13,8 +13,13 @@ namespace CanalTP\SamEcoreUserManagerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
+
+use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Util\TokenGeneratorInterface;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
+
 
 /**
  * Controller managing the resetting of the password
@@ -28,6 +33,40 @@ class ResettingController extends Controller
     const RESET_EMAIL_ALREADY_SENT = 0;
     const RESET_EMAIL_OK = 1;
 
+
+    /**
+     * @var UserManagerInterface
+     */
+    private $userManager;
+
+    /**
+     * @var TokenGeneratorInterface
+     */
+    private $tokenGenerator;
+
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
+     * @var int
+     */
+    private $retryTtl;
+
+    /**
+     * @param UserManagerInterface     $userManager
+     * @param TokenGeneratorInterface  $tokenGenerator
+     * @param MailerInterface          $mailer
+     * @param int                      $retryTtl
+     */
+    public function __construct(UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator, MailerInterface $mailer, $retryTtl)
+    {
+        $this->userManager = $userManager;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->retryTtl = $retryTtl;
+        $this->mailer = $mailer;
+    }
 
     /**
      * Request reset user password: submit form and send email
@@ -60,7 +99,7 @@ class ResettingController extends Controller
                 break;
             case self::RESET_EMAIL_OK:
                 return new RedirectResponse(
-                    $this->get('router')->generate('fos_user_resetting_check_email')
+                    $this->generateUrl('fos_user_resetting_check_email')
                 );
                 break;
         }
@@ -117,26 +156,17 @@ class ResettingController extends Controller
      */
     private function resetEmail(UserInterface $user)
     {
-        $ttl = $this->getParameter('fos_user.resetting.token_ttl');
-        if ($user->isPasswordRequestNonExpired($ttl)) {
+        if ($user->isPasswordRequestNonExpired($this->retryTtl)) {
             return self::RESET_EMAIL_ALREADY_SENT;
         }
 
         if (null === $user->getConfirmationToken()) {
-            /**
-             * @var $tokenGenerator \FOS\UserBundle\Util\TokenGeneratorInterface
-             */
-            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-            $user->setConfirmationToken($tokenGenerator->generateToken());
+            $user->setConfirmationToken($this->tokenGenerator->generateToken());
         }
 
-        /*$this->container->get('session')->set(
-            static::SESSION_EMAIL,
-            $this->getObfuscatedEmail($user)
-        );*/
-        $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        $this->mailer->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
-        $this->get('fos_user.user_manager')->updateUser($user);
+        $this->userManager->updateUser($user);
 
         return self::RESET_EMAIL_OK;
     }

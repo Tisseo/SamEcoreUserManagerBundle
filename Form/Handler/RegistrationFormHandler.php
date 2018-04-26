@@ -7,20 +7,9 @@ use FOS\UserBundle\Util\TokenGenerator;
 use CanalTP\SamEcoreUserManagerBundle\Service\UserManager;
 use CanalTP\SamEcoreUserManagerBundle\Entity\User;
 
-/*use Symfony\Component\Form\FormError;
-use FOS\UserBundle\Form\Handler\RegistrationFormHandler as BaseRegistrationFormHandler;
-use CanalTP\SamEcoreApplicationManagerBundle\Exception\OutOfBoundsException;
-use CanalTP\SamEcoreApplicationManagerBundle\Component\BusinessComponentRegistry;
-use CanalTP\SamEcoreUserManagerBundle\Form\Model\UserRegistration;*/
 
-class RegistrationFormHandler /*extends BaseRegistrationFormHandler*/
+class RegistrationFormHandler
 {
-    /*private $objectManager;
-
-    public function setObjectManager($om)
-    {
-        $this->objectManager = $om;
-    }*/
 
     /**
      * @var UserManager $userManager
