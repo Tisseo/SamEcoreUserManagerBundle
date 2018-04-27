@@ -120,5 +120,15 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="sam.ecoreuser.security.controller" class="CanalTP\SamEcoreUserManagerBundle\Controller\SecurityController" public="true">
+            <argument type="service" id="security.csrf.token_manager" on-invalid="null" />
+            <argument type="service" id="security.token_storage" on-invalid="null" />
+            <argument type="service" id="security.authorization_checker" />
+            <argument type="service" id="sam.component.authentication.handler.login_success_handler" />
+
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 </container>
